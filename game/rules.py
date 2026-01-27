@@ -5,6 +5,9 @@ Handles validation, effect resolution, and legal move generation
 from typing import List, Optional, Dict, Any, Callable
 import random
 
+import os
+print("CWD:", os.getcwd())
+
 from game.state import GameState, PlayerState, WorkerColor, GamePhase
 from game.cards import TownsfolkCard, get_card_database
 from game.board import get_board_database
@@ -30,19 +33,22 @@ class RulesEngine:
         player = state.get_current_player()
         legal_actions = []
         
-        if state.phase == GamePhase.WORK:
-            # Can place worker if player has one
-            if player.worker_in_hand:
-                legal_actions.extend(self._get_legal_place_actions(state, player))
-            
-            # Can pick up worker if player doesn't have one
-            if not player.worker_in_hand:
-                legal_actions.extend(self._get_legal_pickup_actions(state, player))
+        # Turn structure: Player chooses WORK or RAID at start
+        # WORK: Place worker on building -> Pick up worker from different building
+        # RAID: Complete raid sequence (place, pay, roll, pickup all in RaidAction)
         
-        elif state.phase == GamePhase.RAID:
-            # Can raid if player has worker
+        if player.placed_worker_this_turn is None:
+            # PHASE 1: Choose action type (must have worker in hand)
             if player.worker_in_hand:
+                # Option A: Start WORK sequence by placing worker on building
+                legal_actions.extend(self._get_legal_place_actions(state, player))
+                
+                # Option B: Do RAID sequence (complete action, no pickup after)
                 legal_actions.extend(self._get_legal_raid_actions(state, player))
+        else:
+            # PHASE 2: Finish WORK sequence by picking up worker
+            # (Player chose WORK by placing worker, now must pickup)
+            legal_actions.extend(self._get_legal_pickup_actions(state, player))
         
         # No pass action - turn ends automatically after pickup or raid
         
@@ -448,3 +454,10 @@ if __name__ == "__main__":
         player = new_state.get_player(0)
         print(f"  Alice's hand: {len(player.hand)} cards")
         print(f"  Alice's resources: {player.silver}S {player.gold}G {player.provisions}P")
+    
+    print("\nGetting legal actions for Alice...")
+    legal_actions = rules.get_legal_actions(state)
+
+    print(f"\nFound {len(legal_actions)} legal actions:")
+    for i, action in enumerate(legal_actions[:10], 1):
+        print(f"  {i}. {action.get_description()}")

@@ -184,7 +184,7 @@ class PickupWorkerAction(Action):
         if player.placed_worker_this_turn is None:
             return False
         
-        # Cannot pick up the same worker just placed
+        # Cannot pick up from the same building just placed at
         if player.placed_worker_this_turn == self.building_id:
             return False
         
@@ -192,11 +192,10 @@ class PickupWorkerAction(Action):
         if self.building_id in player.buildings_used_this_turn:
             return False
         
-        # Check if player has a worker at this building
+        # Check if there are ANY workers at this building (not player-owned)
         workers_here = state.get_worker_at_building(self.building_id)
-        player_workers = [w for w in workers_here if w.player_id == self.player_id]
         
-        return len(player_workers) > 0
+        return len(workers_here) > 0
     
     def execute(self, state: GameState) -> GameState:
         from game.board import get_board_database
@@ -204,13 +203,14 @@ class PickupWorkerAction(Action):
         player = state.get_player(self.player_id)
         building = get_board_database().get_building(self.building_id)
         
-        # Find and remove player's worker from building
+        # Find and remove ANY worker from building (workers aren't owned)
         workers_here = state.get_worker_at_building(self.building_id)
-        player_worker = next((w for w in workers_here if w.player_id == self.player_id), None)
         
-        if player_worker:
-            state.worker_placements.remove(player_worker)
-            worker_color = player_worker.worker_color
+        if workers_here:
+            # Pick up the first worker
+            worker = workers_here[0]
+            state.worker_placements.remove(worker)
+            worker_color = worker.worker_color
             
             # Put worker in hand
             player.worker_in_hand = worker_color

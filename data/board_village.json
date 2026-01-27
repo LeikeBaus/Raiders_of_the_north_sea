@@ -10,7 +10,7 @@
     {
       "id": "village_001",
       "name": "Gate House",
-      "worker_slots": 2,
+      "worker_slots": 1,
        "action": {
         "type": "draw_cards",
         "amount": 2,
@@ -22,7 +22,7 @@
     {
       "id": "village_002",
       "name": "Town Hall",
-      "worker_slots": 3,
+      "worker_slots": 1,
       "action": {
         "type": "play_card_town_hall",
         "description": "Play 1 Hand Card and resolve its Town Hall action (shown at bottom right of card). Card goes to discard pile."
@@ -63,7 +63,7 @@
     {
       "id": "village_005",
       "name": "Armoury",
-      "worker_slots": 2,
+      "worker_slots": 1,
       "action": {
         "type": "purchase_armour",
         "options": [
@@ -84,7 +84,7 @@
     {
       "id": "village_006",
       "name": "Mill",
-      "worker_slots": 2,
+      "worker_slots": 1,
       "action": {
         "type": "gain_by_worker_color",
         "by_color": {

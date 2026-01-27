@@ -268,6 +268,7 @@ class GameState:
                     worker_color=WorkerColor.BLACK,
                     player_id=-1  # -1 indicates neutral worker
                 ))
+                print(f"Placed neutral black worker on {building.name}")
         
         state = cls(
             players=players,

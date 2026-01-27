@@ -321,7 +321,7 @@ if __name__ == "__main__":
     engine.reset()
     agents = [create_random_agent() for _ in range(3)]
     
-    final_state = engine.play_game(agents, verbose=True, max_turns=100)
+    final_state = engine.play_game(agents, verbose=True, max_turns=10)
     
     print("\nGame Summary:")
     print(engine.get_game_summary())
