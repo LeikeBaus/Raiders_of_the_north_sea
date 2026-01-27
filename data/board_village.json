@@ -1,0 +1,142 @@
+{
+  "_comment": "Village Buildings - Each turn: place worker (triggers action), then pick up worker (triggers same action again)",
+  "_structure_explanation": {
+    "name": "Building name",
+    "worker_slots": "Number of workers that can be placed here",
+    "action": "What happens when placing OR picking up a worker (same action both times)",
+    "worker_requirement": "Which worker colors can use this building: null (any), or array like ['grey', 'white']"
+  },
+  "buildings": [
+    {
+      "id": "village_001",
+      "name": "Gate House",
+      "worker_slots": 2,
+       "action": {
+        "type": "draw_cards",
+        "amount": 2,
+        "description": "Draw 2 Townsfolk cards",
+        "notes": "Hand limit of 8 cards enforced at end of turn"
+      },
+      "worker_requirement": null
+    },
+    {
+      "id": "village_002",
+      "name": "Town Hall",
+      "worker_slots": 3,
+      "action": {
+        "type": "play_card_town_hall",
+        "description": "Play 1 Hand Card and resolve its Town Hall action (shown at bottom right of card). Card goes to discard pile."
+      },
+      "worker_requirement": null
+    },
+    {
+      "id": "village_003",
+      "name": "Treasury",
+      "worker_slots": 1,
+      "action": {
+        "type": "discard_for_currency",
+        "options": [
+          {
+            "discard": 1,
+            "receive": {"silver": 2}
+          },
+          {
+            "discard": 2,
+            "receive": {"gold": 1}
+          }
+        ],
+        "description": "Discard 1 Hand Card to gain 2 Silver, OR discard 2 Hand Cards to gain 1 Gold"
+      },
+      "worker_requirement": null
+    },
+    {
+      "id": "village_004",
+      "name": "Barracks",
+      "worker_slots": 1,
+      "action": {
+        "type": "hire_crew",
+        "description": "Hire a Crew Member from hand (pay Silver cost). Max 5 crew; may discard 1 crew before hiring.",
+        "max_crew": 5
+      },
+      "worker_requirement": null
+    },
+    {
+      "id": "village_005",
+      "name": "Armoury",
+      "worker_slots": 2,
+      "action": {
+        "type": "purchase_armour",
+        "options": [
+          {
+            "cost": {"iron": 1},
+            "receive": {"armour": 2}
+          },
+          {
+            "cost": {"silver": 2},
+            "receive": {"armour": 1}
+          }
+        ],
+        "description": "Lose 1 Iron to gain 2 Armour, OR lose 2 Silver to gain 1 Armour",
+        "max_armour": 10
+      },
+      "worker_requirement": ["grey", "white"]
+    },
+    {
+      "id": "village_006",
+      "name": "Mill",
+      "worker_slots": 2,
+      "action": {
+        "type": "gain_by_worker_color",
+        "by_color": {
+          "black": {"provisions": 1},
+          "grey": {"provisions": 2},
+          "white": {
+            "choice": [
+              {"provisions": 2},
+              {"gold": 1}
+            ]
+          }
+        },
+        "description": "Black Worker: 1 Provision, Grey Worker: 2 Provisions, White Worker: 2 Provisions OR 1 Gold"
+      },
+      "worker_requirement": null
+    },
+    {
+      "id": "village_007",
+      "name": "Silversmith",
+      "worker_slots": 1,
+      "action": {
+        "type": "gain_by_worker_color",
+        "by_color": {
+          "black": {"silver": 3},
+          "grey": {"silver": 2},
+          "white": {"silver": 2}
+        },
+        "description": "Black Worker: 3 Silver, Grey Worker: 2 Silver, White Worker: 2 Silver"
+      },
+      "worker_requirement": null
+    },
+    {
+      "id": "village_008",
+      "name": "Long House",
+      "worker_slots": 1,
+      "action": {
+        "type": "choose_action",
+        "options": [
+          {
+            "type": "trade",
+            "cost": {"livestock": 1},
+            "receive": {"provisions": 2},
+            "description": "Lose 1 Livestock to gain 2 Provisions"
+          },
+          {
+            "type": "make_offering",
+            "description": "Pay Plunder/Silver shown on Offering Tile to gain it (scores VP at game end). New tile immediately revealed."
+          }
+        ],
+        "description": "Choose: (1) Lose 1 Livestock for 2 Provisions, OR (2) Make an Offering"
+      },
+      "worker_requirement": ["grey", "white"]
+    }
+  ]
+}

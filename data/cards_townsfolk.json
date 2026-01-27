@@ -1,0 +1,550 @@
+{
+  "_comment": "Townsfolk/Crew Cards - When hired, a 'Townsfolk' becomes 'Crew' for that player",
+  "_structure_explanation": {
+    "name": "Card name",
+    "cost": "Silver cost to hire",
+    "strength": "Combat strength for raids",
+    "deck_count": "Number of copies in the deck",
+    "vp": "Base victory points at game end",
+    "hire_crew_action": "Effect when hiring crew at Barracks/Town Hall",
+    "town_hall_action": "Special action available at Town Hall",
+    "color_requirement": "grey | black | null (worker color needed to hire, if specific)"
+  },
+  "cards": [
+    {
+      "id": "card_001",
+      "name": "Archer",
+      "cost": 3,
+      "strength": 3,
+      "deck_count": 2,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 2 VP when raiding an Outpost",
+        "type": "raid_bonus",
+        "condition": "raid_type",
+        "raid_type": "outpost",
+        "bonus": {"vp": 2}
+      },
+      "town_hall_action": {
+        "description": "Swap an opponent's worker with 1 from the Village",
+        "type": "swap_worker"
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_002",
+      "name": "Armourer",
+      "cost": 3,
+      "strength": 3,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 2 Strength when raiding a Monastery",
+        "type": "raid_strength_bonus",
+        "condition": "raid_type",
+        "raid_type": "monastery",
+        "bonus": 2
+      },
+      "town_hall_action": {
+        "description": "Gain 1 Armour",
+        "type": "gain_resource",
+        "resource": "armour",
+        "amount": 1
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_003",
+      "name": "Avenger",
+      "cost": 3,
+      "strength": 3,
+      "deck_count": 2,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "If killed, force an opponent to lose a crew member also",
+        "type": "on_death",
+        "effect": "opponent_loses_crew"
+      },
+      "town_hall_action": {
+        "description": "Force all opponents to lose 1 silver",
+        "type": "opponents_lose_resource",
+        "resource": "silver",
+        "amount": 1
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_004",
+      "name": "Barbarian",
+      "cost": 3,
+      "strength": 3,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 2 Strength when raiding a Fortress",
+        "type": "raid_strength_bonus",
+        "condition": "raid_type",
+        "raid_type": "fortress",
+        "bonus": 2
+      },
+      "town_hall_action": {
+        "description": "Take any 1 plunder from an opponent",
+        "type": "steal_plunder",
+        "amount": 1
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_005",
+      "name": "Berserker",
+      "cost": 3,
+      "strength": 4,
+      "deck_count": 4,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "If killed in a raid place card back into hand",
+        "type": "on_death",
+        "effect": "return_to_hand"
+      },
+      "town_hall_action": {
+        "description": "Force an opponent to lose 1 Armour",
+        "type": "opponent_loses_resource",
+        "resource": "armour",
+        "amount": 1
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_006",
+      "name": "Brawler",
+      "cost": 2,
+      "strength": 2,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Once per raid you may reroll 1 die",
+        "type": "raid_ability",
+        "effect": "reroll_die"
+      },
+      "town_hall_action": {
+        "description": "Lose 1 crew member to gain 1 plunder from the supply",
+        "type": "trade",
+        "give": {"crew": 1},
+        "receive": {"plunder": 1}
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_007",
+      "name": "Brynjar (Hero)",
+      "cost": 4,
+      "strength": 4,
+      "deck_count": 1,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 strength for every 3 Armour you currently hold",
+        "type": "dynamic_strength",
+        "condition": "armour_count",
+        "divisor": 3,
+        "bonus_per": 1
+      },
+      "town_hall_action": {
+        "description": "Hero - Cannot be discarded at Town Hall",
+        "type": "hero_no_discard"
+      },
+      "color_requirement": null,
+      "is_hero": true
+    },
+    {
+      "id": "card_008",
+      "name": "Cartographer",
+      "cost": 1,
+      "strength": 0,
+      "deck_count": 2,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Pay 1 less gold when raiding a Fortress",
+        "type": "raid_discount",
+        "condition": "raid_type",
+        "raid_type": "fortress",
+        "discount": {"gold": 1}
+      },
+      "town_hall_action": {
+        "description": "Lose 1 provision to gain 1 gold",
+        "type": "trade",
+        "give": {"provisions": 1},
+        "receive": {"gold": 1}
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_009",
+      "name": "Champion",
+      "cost": 4,
+      "strength": 4,
+      "deck_count": 2,
+      "vp": 3,
+      "hire_crew_action": {
+        "description": "Gain 3 VP at the game's end",
+        "type": "end_game",
+        "vp": 3
+      },
+      "town_hall_action": {
+        "description": "Force all opponents to lose 1 provision",
+        "type": "opponents_lose_resource",
+        "resource": "provisions",
+        "amount": 1
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_010",
+      "name": "Folke (Hero)",
+      "cost": 4,
+      "strength": 3,
+      "deck_count": 1,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 strength for all other hired crew members",
+        "type": "dynamic_strength",
+        "condition": "crew_count",
+        "bonus_per": 1
+      },
+      "town_hall_action": {
+        "description": "Hero - Cannot be discarded at Town Hall",
+        "type": "hero_no_discard"
+      },
+      "color_requirement": null,
+      "is_hero": true
+    },
+    {
+      "id": "card_011",
+      "name": "Forager",
+      "cost": 1,
+      "strength": 0,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 additional provision in the Mill",
+        "type": "building_bonus",
+        "building": "mill",
+        "bonus": {"provisions": 1}
+      },
+      "town_hall_action": {
+        "description": "Gain 2 Provisions",
+        "type": "gain_resource",
+        "resource": "provisions",
+        "amount": 2
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_012",
+      "name": "Gatekeeper",
+      "cost": 3,
+      "strength": 2,
+      "deck_count": 4,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Draw 1 additional card in the Gate House",
+        "type": "building_bonus",
+        "building": "gatehouse",
+        "bonus": {"cards": 1}
+      },
+      "town_hall_action": {
+        "description": "Draw 3 new cards to your hand",
+        "type": "draw_cards",
+        "amount": 3
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_013",
+      "name": "Gravedigger",
+      "cost": 1,
+      "strength": 0,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "If killed in a raid gain 1 gold",
+        "type": "on_death",
+        "effect": "gain_resource",
+        "resource": "gold",
+        "amount": 1
+      },
+      "town_hall_action": {
+        "description": "Swap 1 hired crew member with a card in your hand",
+        "type": "swap_crew_card"
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_014",
+      "name": "Huntsman",
+      "cost": 1,
+      "strength": 1,
+      "deck_count": 4,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Pay 1 less Provision when raiding an Outpost",
+        "type": "raid_discount",
+        "condition": "raid_type",
+        "raid_type": "outpost",
+        "discount": {"provisions": 1}
+      },
+      "town_hall_action": {
+        "description": "Gain 1 Provision & 1 Silver",
+        "type": "gain_resources",
+        "resources": {"provisions": 1, "silver": 1}
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_015",
+      "name": "Jeweller",
+      "cost": 1,
+      "strength": 0,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 additional silver in the Silversmith",
+        "type": "building_bonus",
+        "building": "silversmith",
+        "bonus": {"silver": 1}
+      },
+      "town_hall_action": {
+        "description": "Lose 2 silver to gain 1 gold",
+        "type": "trade",
+        "give": {"silver": 2},
+        "receive": {"gold": 1}
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_016",
+      "name": "Marauder",
+      "cost": 2,
+      "strength": 2,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 VP when raiding an Outpost",
+        "type": "raid_bonus",
+        "condition": "raid_type",
+        "raid_type": "outpost",
+        "bonus": {"vp": 1}
+      },
+      "town_hall_action": {
+        "description": "Lose 1 livestock to gain 1 gold",
+        "type": "trade",
+        "give": {"livestock": 1},
+        "receive": {"gold": 1}
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_017",
+      "name": "Mercenary",
+      "cost": 4,
+      "strength": 4,
+      "deck_count": 4,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "If killed in a raid gain 1 VP",
+        "type": "on_death",
+        "effect": "gain_vp",
+        "amount": 1
+      },
+      "town_hall_action": {
+        "description": "All players must give you 1 silver or 1 provision",
+        "type": "collect_from_opponents",
+        "options": ["silver", "provisions"],
+        "amount": 1
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_018",
+      "name": "Merchant",
+      "cost": 2,
+      "strength": 0,
+      "deck_count": 2,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 additional VP for each livestock at the game's end",
+        "type": "end_game",
+        "vp_per": "livestock",
+        "amount": 1
+      },
+      "town_hall_action": {
+        "description": "Use any building's action as if your worker was there",
+        "type": "copy_building_action"
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_019",
+      "name": "Ragnhildr (Hero)",
+      "cost": 4,
+      "strength": 4,
+      "deck_count": 1,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 strength for every 2 Valkyrie you have taken",
+        "type": "dynamic_strength",
+        "condition": "valkyrie_count",
+        "divisor": 2,
+        "bonus_per": 1
+      },
+      "town_hall_action": {
+        "description": "Hero - Cannot be discarded at Town Hall",
+        "type": "hero_no_discard"
+      },
+      "color_requirement": null,
+      "is_hero": true
+    },
+    {
+      "id": "card_020",
+      "name": "Recruiter",
+      "cost": 2,
+      "strength": 1,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Pay 1 less silver when hiring crew in the Barracks",
+        "type": "building_bonus",
+        "building": "barracks",
+        "bonus": {"hire_discount": 1}
+      },
+      "town_hall_action": {
+        "description": "Hire 1 crew member immediately for only 2 silver",
+        "type": "hire_crew_discounted",
+        "cost": 2
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_021",
+      "name": "Sage",
+      "cost": 2,
+      "strength": 1,
+      "deck_count": 2,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "You may take 1 additional action in the Long House",
+        "type": "building_bonus",
+        "building": "longhouse",
+        "bonus": {"extra_action": 1}
+      },
+      "town_hall_action": {
+        "description": "Move all 3 offering tiles to the bottom of the stack",
+        "type": "manipulate_offerings"
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_022",
+      "name": "Scout",
+      "cost": 2,
+      "strength": 2,
+      "deck_count": 3,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Pay 1 less provision when raiding a Monastery",
+        "type": "raid_discount",
+        "condition": "raid_type",
+        "raid_type": "monastery",
+        "discount": {"provisions": 1}
+      },
+      "town_hall_action": {
+        "description": "Swap an equal amount of cards with an opponent",
+        "type": "swap_cards_opponent"
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_023",
+      "name": "ShieldMaiden",
+      "cost": 3,
+      "strength": 3,
+      "deck_count": 4,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 VP when raiding a Monastery",
+        "type": "raid_bonus",
+        "condition": "raid_type",
+        "raid_type": "monastery",
+        "bonus": {"vp": 1}
+      },
+      "town_hall_action": {
+        "description": "Lose 1 livestock to gain 1 iron",
+        "type": "trade",
+        "give": {"livestock": 1},
+        "receive": {"iron": 1}
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_024",
+      "name": "Trader",
+      "cost": 3,
+      "strength": 0,
+      "deck_count": 2,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 additional VP for each Offerings Tile at the game's end",
+        "type": "end_game",
+        "vp_per": "offerings",
+        "amount": 1
+      },
+      "town_hall_action": {
+        "description": "Make an offering paying 1 less plunder or silver",
+        "type": "offering_discount",
+        "discount": 1
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_025",
+      "name": "Warlord",
+      "cost": 4,
+      "strength": 3,
+      "deck_count": 3,
+      "vp": 2,
+      "hire_crew_action": {
+        "description": "Gain 2 VP at the game's end",
+        "type": "end_game",
+        "vp": 2
+      },
+      "town_hall_action": {
+        "description": "Take up to 2 silver from an opponent",
+        "type": "steal_resource",
+        "resource": "silver",
+        "amount": 2
+      },
+      "color_requirement": null
+    },
+    {
+      "id": "card_026",
+      "name": "Warmonger",
+      "cost": 3,
+      "strength": 3,
+      "deck_count": 4,
+      "vp": 0,
+      "hire_crew_action": {
+        "description": "Gain 1 VP when raiding a Harbour",
+        "type": "raid_bonus",
+        "condition": "raid_type",
+        "raid_type": "harbor",
+        "bonus": {"vp": 1}
+      },
+      "town_hall_action": {
+        "description": "Take 1 provision from an opponent",
+        "type": "steal_resource",
+        "resource": "provisions",
+        "amount": 1
+      },
+      "color_requirement": null
+    }
+  ]
+}

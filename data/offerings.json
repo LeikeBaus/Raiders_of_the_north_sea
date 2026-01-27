@@ -1,0 +1,137 @@
+{
+  "_comment": "Offering Tiles - Pay plunder/silver at Long House to gain VP at game end",
+  "_structure_explanation": {
+    "requirements": "Resources to pay (gold, iron, livestock, silver)",
+    "vp": "Victory points scored at game end"
+  },
+  "offerings": [
+    {
+      "id": "offering_001",
+      "requirements": {
+        "gold": 2
+      },
+      "vp": 4
+    },
+    {
+      "id": "offering_002",
+      "requirements": {
+        "iron": 2
+      },
+      "vp": 4
+    },
+    {
+      "id": "offering_003",
+      "requirements": {
+        "livestock": 3,
+        "silver": 1
+      },
+      "vp": 4
+    },
+    {
+      "id": "offering_004",
+      "requirements": {
+        "iron": 1,
+        "livestock": 2,
+        "silver": 1
+      },
+      "vp": 5
+    },
+    {
+      "id": "offering_005",
+      "requirements": {
+        "gold": 1,
+        "livestock": 2,
+        "silver": 1
+      },
+      "vp": 5
+    },
+    {
+      "id": "offering_006",
+      "requirements": {
+        "gold": 1,
+        "iron": 1,
+        "livestock": 1
+      },
+      "vp": 5
+    },
+    {
+      "id": "offering_007",
+      "requirements": {
+        "iron": 2,
+        "livestock": 2
+      },
+      "vp": 6
+    },
+    {
+      "id": "offering_008",
+      "requirements": {
+        "gold": 2,
+        "livestock": 2
+      },
+      "vp": 6
+    },
+    {
+      "id": "offering_009",
+      "requirements": {
+        "silver": 4
+      },
+      "vp": 2
+    },
+    {
+      "id": "offering_010",
+      "requirements": {
+        "iron": 1,
+        "livestock": 1
+      },
+      "vp": 3
+    },
+    {
+      "id": "offering_011",
+      "requirements": {
+        "gold": 1,
+        "livestock": 1
+      },
+      "vp": 3
+    },
+    {
+      "id": "offering_012",
+      "requirements": {
+        "iron": 1,
+        "silver": 2
+      },
+      "vp": 3
+    },
+    {
+      "id": "offering_013",
+      "requirements": {
+        "gold": 1,
+        "silver": 2
+      },
+      "vp": 3
+    },
+    {
+      "id": "offering_014",
+      "requirements": {
+        "iron": 1,
+        "livestock": 2
+      },
+      "vp": 4
+    },
+    {
+      "id": "offering_015",
+      "requirements": {
+        "gold": 1,
+        "livestock": 2
+      },
+      "vp": 4
+    },
+    {
+      "id": "offering_016",
+      "requirements": {
+        "gold": 1,
+        "iron": 1
+      },
+      "vp": 4
+    }
+  ]
+}
