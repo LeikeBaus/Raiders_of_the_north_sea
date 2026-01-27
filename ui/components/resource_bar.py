@@ -3,7 +3,8 @@ Resource display component
 """
 import pygame
 from typing import Dict
-from ui.config import *
+from ui import config
+from ui.components.icon_manager import draw_icon_with_text, RESOURCE_ICONS
 
 
 class ResourceBar:
@@ -13,37 +14,31 @@ class ResourceBar:
         self.x = x
         self.y = y
         self.width = width
-        self.font = pygame.font.Font(None, RESOURCE_FONT_SIZE)
+        self.font = pygame.font.Font(None, config.RESOURCE_FONT_SIZE)
     
     def draw(self, screen: pygame.Surface, resources: Dict[str, int]):
         """
-        Draw resource bar
+        Draw resource bar with icons
         resources: dict with keys like 'silver', 'gold', 'provisions', etc.
         """
         resource_display = [
-            ("Silver", resources.get('silver', 0), LIGHT_GRAY),
-            ("Gold", resources.get('gold', 0), GOLD),
-            ("Prov", resources.get('provisions', 0), BROWN),
-            ("Iron", resources.get('iron', 0), DARK_GRAY),
-            ("Stock", resources.get('livestock', 0), GREEN),
+            ('silver', resources.get('silver', 0)),
+            ('gold', resources.get('gold', 0)),
+            ('provisions', resources.get('provisions', 0)),
+            ('iron', resources.get('iron', 0)),
+            ('livestock', resources.get('livestock', 0)),
         ]
         
-        item_width = 80
         current_x = self.x
+        icon_size = config.RESOURCE_ICON_SIZE
         
-        for name, amount, color in resource_display:
-            # Background box
-            box_rect = pygame.Rect(current_x, self.y, item_width, RESOURCE_ICON_SIZE)
-            pygame.draw.rect(screen, color, box_rect)
-            pygame.draw.rect(screen, BLACK, box_rect, 1)
-            
-            # Text
-            text = f"{name}: {amount}"
-            text_surface = self.font.render(text, True, BLACK)
-            text_rect = text_surface.get_rect(center=box_rect.center)
-            screen.blit(text_surface, text_rect)
-            
-            current_x += item_width + RESOURCE_SPACING
+        for resource_name, amount in resource_display:
+            icon_name = RESOURCE_ICONS.get(resource_name, resource_name)
+            width_used = draw_icon_with_text(
+                screen, icon_name, current_x, self.y,
+                icon_size, str(amount), self.font, config.BLACK
+            )
+            current_x += width_used
 
 
 class CombatStats:
@@ -52,10 +47,20 @@ class CombatStats:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
-        self.font = pygame.font.Font(None, RESOURCE_FONT_SIZE)
+        self.font = pygame.font.Font(None, config.RESOURCE_FONT_SIZE)
     
     def draw(self, screen: pygame.Surface, armour: int, valkyrie: int):
-        """Draw combat stats"""
-        text = f"Armour: {armour} | Valkyrie: {valkyrie}"
-        text_surface = self.font.render(text, True, BLACK)
-        screen.blit(text_surface, (self.x, self.y))
+        """Draw combat stats with icons"""
+        current_x = self.x
+        icon_size = config.RESOURCE_ICON_SIZE
+        
+        # Armour (using strength icon as proxy)
+        text_surface = self.font.render(f"Armour: {armour}", True, config.BLACK)
+        screen.blit(text_surface, (current_x, self.y))
+        current_x += text_surface.get_width() + 15
+        
+        # Valkyrie
+        draw_icon_with_text(
+            screen, RESOURCE_ICONS['valkyrie'], current_x, self.y,
+            icon_size, str(valkyrie), self.font, config.BLACK
+        )

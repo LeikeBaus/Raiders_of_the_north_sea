@@ -3,7 +3,7 @@ Reusable button component
 """
 import pygame
 from typing import Callable, Optional, Tuple
-from ui.config import *
+from ui import config
 
 
 class Button:
@@ -17,18 +17,18 @@ class Button:
         height: int,
         text: str,
         on_click: Optional[Callable] = None,
-        color: Tuple[int, int, int] = GREEN,
+        color: Tuple[int, int, int] = None,
         hover_color: Tuple[int, int, int] = None,
-        text_color: Tuple[int, int, int] = BLACK,
-        font_size: int = BUTTON_FONT_SIZE
+        text_color: Tuple[int, int, int] = None,
+        font_size: int = None
     ):
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.on_click = on_click
-        self.color = color
-        self.hover_color = hover_color or self._lighten_color(color)
-        self.text_color = text_color
-        self.font = pygame.font.Font(None, font_size)
+        self.color = color or config.GREEN
+        self.hover_color = hover_color or self._lighten_color(self.color)
+        self.text_color = text_color or config.BLACK
+        self.font = pygame.font.Font(None, font_size or config.BUTTON_FONT_SIZE)
         self.is_hovered = False
     
     def _lighten_color(self, color: Tuple[int, int, int]) -> Tuple[int, int, int]:
@@ -60,7 +60,7 @@ class Button:
         # Background
         current_color = self.hover_color if self.is_hovered else self.color
         pygame.draw.rect(screen, current_color, self.rect)
-        pygame.draw.rect(screen, BLACK, self.rect, 2)
+        pygame.draw.rect(screen, config.BLACK, self.rect, 2)
         
         # Text
         text_surface = self.font.render(self.text, True, self.text_color)

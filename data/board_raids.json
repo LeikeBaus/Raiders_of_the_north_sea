@@ -1,7 +1,7 @@
 {
   "_comment": "Raid Locations - Each location has requirements and sublocations with plunder",
   "_structure_explanation": {
-    "type": "harbor | outpost | monastery | fortress",
+    "type": "harbour | outpost | monastery | fortress",
     "requirements": "Worker colors allowed, provisions, gold, minimum crew to participate",
     "vp_tiers": "VP awarded based on strength achieved (dice + crew strength + modifiers)",
     "dice_added": "Number of dice added to the strength roll",
@@ -10,8 +10,8 @@
   "raids": [
     {
       "id": "raid_001",
-      "name": "Harbor 1",
-      "type": "harbor",
+      "name": "Harbour 1",
+      "type": "harbour",
       "requirements": {
         "worker_colors": ["black", "grey"],
         "provisions": 3,
@@ -23,15 +23,15 @@
       ],
       "dice_added": 0,
       "sublocations": [
-        {"id": "harbor1_sub1", "plunder": 4, "worker_on_spot": "grey"},
-        {"id": "harbor1_sub2", "plunder": 3, "worker_on_spot": "grey"},
-        {"id": "harbor1_sub3", "plunder": 4, "worker_on_spot": "grey"}
+        {"id": "harbour1_sub1", "plunder": 4, "worker_on_spot": "grey"},
+        {"id": "harbour1_sub2", "plunder": 3, "worker_on_spot": "grey"},
+        {"id": "harbour1_sub3", "plunder": 4, "worker_on_spot": "grey"}
       ]
     },
     {
       "id": "raid_002",
-      "name": "Harbor 2",
-      "type": "harbor",
+      "name": "Harbour 2",
+      "type": "harbour",
       "requirements": {
         "worker_colors": ["black", "grey"],
         "provisions": 1,
@@ -43,15 +43,15 @@
       ],
       "dice_added": 0,
       "sublocations": [
-        {"id": "harbor2_sub1", "plunder": 3, "worker_on_spot": "grey"},
-        {"id": "harbor2_sub2", "plunder": 4, "worker_on_spot": "grey"},
-        {"id": "harbor2_sub3", "plunder": 4, "worker_on_spot": "grey"}
+        {"id": "harbour2_sub1", "plunder": 3, "worker_on_spot": "grey"},
+        {"id": "harbour2_sub2", "plunder": 4, "worker_on_spot": "grey"},
+        {"id": "harbour2_sub3", "plunder": 4, "worker_on_spot": "grey"}
       ]
     },
     {
       "id": "raid_003",
-      "name": "Harbor 3",
-      "type": "harbor",
+      "name": "Harbour 3",
+      "type": "harbour",
       "requirements": {
         "worker_colors": ["black", "grey"],
         "provisions": 2,
@@ -63,9 +63,9 @@
       ],
       "dice_added": 0,
       "sublocations": [
-        {"id": "harbor3_sub1", "plunder": 4, "worker_on_spot": "grey"},
-        {"id": "harbor3_sub2", "plunder": 3, "worker_on_spot": "grey"},
-        {"id": "harbor3_sub3", "plunder": 4, "worker_on_spot": "grey"}
+        {"id": "harbour3_sub1", "plunder": 4, "worker_on_spot": "grey"},
+        {"id": "harbour3_sub2", "plunder": 3, "worker_on_spot": "grey"},
+        {"id": "harbour3_sub3", "plunder": 4, "worker_on_spot": "grey"}
       ]
     },
     {

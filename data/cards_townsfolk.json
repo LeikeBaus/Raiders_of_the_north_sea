@@ -136,7 +136,7 @@
     },
     {
       "id": "card_007",
-      "name": "Brynjar (Hero)",
+      "name": "Brynjar",
       "cost": 4,
       "strength": 4,
       "deck_count": 1,
@@ -199,7 +199,7 @@
     },
     {
       "id": "card_010",
-      "name": "Folke (Hero)",
+      "name": "Folke",
       "cost": 4,
       "strength": 3,
       "deck_count": 1,
@@ -384,7 +384,7 @@
     },
     {
       "id": "card_019",
-      "name": "Ragnhildr (Hero)",
+      "name": "Ragnhildr",
       "cost": 4,
       "strength": 4,
       "deck_count": 1,

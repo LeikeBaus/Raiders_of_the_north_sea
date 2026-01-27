@@ -5,9 +5,6 @@ Handles validation, effect resolution, and legal move generation
 from typing import List, Optional, Dict, Any, Callable
 import random
 
-import os
-print("CWD:", os.getcwd())
-
 from game.state import GameState, PlayerState, WorkerColor, GamePhase
 from game.cards import TownsfolkCard, get_card_database
 from game.board import get_board_database

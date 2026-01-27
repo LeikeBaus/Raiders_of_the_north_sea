@@ -229,10 +229,10 @@ class BoardView:
         # Draw plunder icon (what type of plunder is here)
         plunder_remaining = subloc_state.plunder_remaining if subloc_state else subloc.plunder
         if plunder_remaining > 0:
-            # Show plunder count in large yellow text
-            plunder_text = f"P:{plunder_remaining}"
-            plunder_surface = self.font_small.render(plunder_text, True, config.YELLOW)
-            screen.blit(plunder_surface, (x + width - 35, y + 3))
+            # Show plunder count
+            plunder_text = str(plunder_remaining)
+            plunder_surface = self.font_small.render(plunder_text, True, config.GOLD)
+            screen.blit(plunder_surface, (x + width - 20, y + 25))
     
     def _draw_building(self, screen: pygame.Surface, building, x: int, y: int, 
                       width: int, state: GameState):
