@@ -226,13 +226,28 @@ class BoardView:
         if worker_icon:
             screen.blit(worker_icon, (x + 3, y + 18))
         
-        # Draw plunder icon (what type of plunder is here)
+        # Draw plunder icons
         plunder_remaining = subloc_state.plunder_remaining if subloc_state else subloc.plunder
         if plunder_remaining > 0:
-            # Show plunder count in large yellow text
-            plunder_text = f"P:{plunder_remaining}"
-            plunder_surface = self.font_small.render(plunder_text, True, config.YELLOW)
-            screen.blit(plunder_surface, (x + width - 35, y + 3))
+            # Display plunder as small icons (mix of resources)
+            # For now, show generic plunder icons - will be replaced with actual resource types later
+            icon_size = config.scale(12)
+            plunder_icons = ['valkyrie', 'gold', 'iron', 'livestock']  # Cycle through resources
+            
+            icon_x = x + width - 15 * min(plunder_remaining, 3) - 5
+            for i in range(min(plunder_remaining, 3)):  # Show max 3 icons
+                resource = plunder_icons[i % len(plunder_icons)]
+                icon_name = RESOURCE_ICONS.get(resource, 'gold')
+                icon = load_icon(icon_name, icon_size)
+                if icon:
+                    screen.blit(icon, (icon_x, y + 5))
+                icon_x += 15
+            
+            # If more than 3, show count
+            if plunder_remaining > 3:
+                count_text = f"+{plunder_remaining - 3}"
+                count_surface = self.font_tiny.render(count_text, True, config.YELLOW)
+                screen.blit(count_surface, (icon_x, y + 7))
     
     def _draw_building(self, screen: pygame.Surface, building, x: int, y: int, 
                       width: int, state: GameState):
@@ -308,6 +323,106 @@ class BoardView:
     
     def get_hover_info(self, mouse_pos, state: GameState):
         """Get information about what the mouse is hovering over"""
-        # TODO: Implement hover detection for new layout
-        # For now, return None
+        mx, my = mouse_pos
+        
+        # Check offerings (rows 5 and 6, right side)
+        if len(state.visible_offerings) >= 3:
+            # Offering 3 on row 5
+            off_x = config.OFFERING_AREA_X
+            off_y = config.ROW5_Y
+            if (off_x <= mx <= off_x + config.OFFERING_TILE_SIZE and
+                off_y <= my <= off_y + config.OFFERING_TILE_SIZE):
+                return ('offering', state.visible_offerings[2])
+        
+        if len(state.visible_offerings) >= 1:
+            # Offering 1 on row 6
+            off_x = config.OFFERING_AREA_X
+            off_y = config.ROW6_Y
+            if (off_x <= mx <= off_x + config.OFFERING_TILE_SIZE and
+                off_y <= my <= off_y + config.OFFERING_TILE_SIZE):
+                return ('offering', state.visible_offerings[0])
+        
+        if len(state.visible_offerings) >= 2:
+            # Offering 2 on row 6
+            off_x = config.OFFERING_AREA_X + config.OFFERING_TILE_SIZE + config.BOX_SPACING
+            off_y = config.ROW6_Y
+            if (off_x <= mx <= off_x + config.OFFERING_TILE_SIZE and
+                off_y <= my <= off_y + config.OFFERING_TILE_SIZE):
+                return ('offering', state.visible_offerings[1])
+        
+        # Check buildings (rows 5 and 6)
+        row5_buildings = ["Gate House", "Treasury", "Town Hall", "Barracks"]
+        x_pos = self.x + config.BOX_SPACING
+        for bldg_name in row5_buildings:
+            if (x_pos <= mx <= x_pos + config.BUILDING_SLOT_WIDTH and
+                config.ROW5_Y <= my <= config.ROW5_Y + config.BUILDING_SLOT_HEIGHT):
+                bldg = self._building_lookup.get(bldg_name)
+                if bldg:
+                    return ('building', bldg)
+            x_pos += config.BUILDING_SLOT_WIDTH + config.BOX_SPACING
+        
+        row6_buildings = ["Armoury", "Mill", "Silversmith", "Long House"]
+        x_pos = self.x + config.BOX_SPACING
+        for bldg_name in row6_buildings:
+            if (x_pos <= mx <= x_pos + config.BUILDING_SLOT_WIDTH and
+                config.ROW6_Y <= my <= config.ROW6_Y + config.BUILDING_SLOT_HEIGHT):
+                bldg = self._building_lookup.get(bldg_name)
+                if bldg:
+                    return ('building', bldg)
+            x_pos += config.BUILDING_SLOT_WIDTH + config.BOX_SPACING
+        
+        # Check raid slots
+        # Row 1: Fortresses
+        fortresses = [r for r in self.board_db.raids if r.type == 'fortress']
+        x_pos = self.x + config.BOX_SPACING
+        for fortress in fortresses:
+            for subloc in fortress.sublocations[:2]:
+                if (x_pos <= mx <= x_pos + config.FORTRESS_SLOT_WIDTH and
+                    config.FORTRESS_Y <= my <= config.FORTRESS_Y + config.SLOT_HEIGHT):
+                    return ('raid', fortress)
+                x_pos += config.FORTRESS_SLOT_WIDTH + config.BOX_SPACING
+            x_pos += config.BOX_SPACING
+        
+        # Row 2: Monastery 2, Monastery 1, Outpost 2
+        raids_row2 = [
+            self._raid_lookup.get("Monastery 2"),
+            self._raid_lookup.get("Monastery 1"),
+            self._raid_lookup.get("Outpost 2")
+        ]
+        x_pos = self.x + config.BOX_SPACING
+        for raid in raids_row2:
+            if raid:
+                for subloc in raid.sublocations:
+                    if (x_pos <= mx <= x_pos + config.FORTRESS_SLOT_WIDTH and
+                        config.ROW2_Y <= my <= config.ROW2_Y + config.SLOT_HEIGHT):
+                        return ('raid', raid)
+                    x_pos += config.FORTRESS_SLOT_WIDTH + config.BOX_SPACING
+                x_pos += config.BOX_SPACING
+        
+        # Row 3: Harbour 3, Outpost 1
+        har3 = self._raid_lookup.get("Harbour 3")
+        out1 = self._raid_lookup.get("Outpost 1")
+        x_pos = self.x + config.BOX_SPACING
+        for raid in [har3, out1]:
+            if raid:
+                for subloc in raid.sublocations:
+                    if (x_pos <= mx <= x_pos + config.FORTRESS_SLOT_WIDTH and
+                        config.ROW3_Y <= my <= config.ROW3_Y + config.SLOT_HEIGHT):
+                        return ('raid', raid)
+                    x_pos += config.FORTRESS_SLOT_WIDTH + config.BOX_SPACING
+                x_pos += config.BOX_SPACING
+        
+        # Row 4: Harbour 2, Harbour 1
+        har2 = self._raid_lookup.get("Harbour 2")
+        har1 = self._raid_lookup.get("Harbour 1")
+        x_pos = self.x + config.BOX_SPACING
+        for raid in [har2, har1]:
+            if raid:
+                for subloc in raid.sublocations:
+                    if (x_pos <= mx <= x_pos + config.FORTRESS_SLOT_WIDTH and
+                        config.ROW4_Y <= my <= config.ROW4_Y + config.SLOT_HEIGHT):
+                        return ('raid', raid)
+                    x_pos += config.FORTRESS_SLOT_WIDTH + config.BOX_SPACING
+                x_pos += config.BOX_SPACING
+        
         return None

@@ -194,29 +194,45 @@ class DetailView:
         building = self.object_data
         padding = config.DETAIL_VIEW_PADDING
         
-        # Title
+        # Draw a larger building representation (no image available)
+        building_box_width = config.scale(200)
+        building_box_height = config.scale(120)
+        building_x = x + width // 2 - building_box_width // 2
+        building_y = y + padding
+        
+        pygame.draw.rect(screen, config.DARK_GREEN, (building_x, building_y, building_box_width, building_box_height))
+        pygame.draw.rect(screen, config.BLACK, (building_x, building_y, building_box_width, building_box_height), 3)
+        
+        # Title in the box
         title = building.name if hasattr(building, 'name') else str(building)
-        title_surface = self.font_title.render(title, True, config.BLACK)
-        screen.blit(title_surface, (x + padding, y + padding))
+        title_surface = self.font_title.render(title, True, config.WHITE)
+        title_rect = title_surface.get_rect(center=(building_x + building_box_width // 2, building_y + building_box_height // 2))
+        screen.blit(title_surface, title_rect)
+        
+        # Continue with details below the box
+        details_y = building_y + building_box_height + 20
         
         # Worker slots
         if hasattr(building, 'worker_slots'):
             slots_text = self.font_info.render(f"Worker Slots: {building.worker_slots}", True, config.DARK_GRAY)
-            screen.blit(slots_text, (x + padding, y + padding + 35))
+            screen.blit(slots_text, (x + padding, details_y))
+            details_y += 30
         
         # Worker requirement
         if hasattr(building, 'worker_requirement') and building.worker_requirement:
             req_text = "Allowed: " + ", ".join(building.worker_requirement)
             req_surface = self.font_small.render(req_text, True, config.DARK_BLUE)
-            screen.blit(req_surface, (x + padding, y + padding + 65))
+            screen.blit(req_surface, (x + padding, details_y))
         else:
             req_surface = self.font_small.render("Allowed: Any worker", True, config.DARK_GREEN)
-            screen.blit(req_surface, (x + padding, y + padding + 65))
+            screen.blit(req_surface, (x + padding, details_y))
+        details_y += 35
         
         # Action description
         if hasattr(building, 'action'):
             action_title = self.font_info.render("Action:", True, config.BLACK)
-            screen.blit(action_title, (x + padding, y + padding + 100))
+            screen.blit(action_title, (x + padding, details_y))
+            details_y += 30
             
             action_data = building.action
             desc = action_data.get('description', 'No description')
@@ -224,7 +240,7 @@ class DetailView:
             # Word wrap description
             words = desc.split()
             line = ""
-            line_y = y + padding + 130
+            line_y = details_y
             for word in words:
                 test_line = line + word + " "
                 if self.font_small.size(test_line)[0] < width - 2 * padding:
@@ -245,16 +261,44 @@ class DetailView:
         raid = self.object_data
         padding = config.DETAIL_VIEW_PADDING
         
-        # Title
+        # Draw a larger raid representation (no image available)
+        color_map = {
+            'harbour': config.BLUE,
+            'harbor': config.BLUE,
+            'outpost': config.ORANGE,
+            'monastery': config.PURPLE,
+            'fortress': config.RED
+        }
+        raid_color = color_map.get(raid.type, config.GRAY)
+        
+        raid_box_width = config.scale(200)
+        raid_box_height = config.scale(100)
+        raid_x = x + width // 2 - raid_box_width // 2
+        raid_y = y + padding
+        
+        pygame.draw.rect(screen, raid_color, (raid_x, raid_y, raid_box_width, raid_box_height))
+        pygame.draw.rect(screen, config.BLACK, (raid_x, raid_y, raid_box_width, raid_box_height), 3)
+        
+        # Title in the box
         title = raid.name if hasattr(raid, 'name') else str(raid)
-        title_surface = self.font_title.render(title, True, config.BLACK)
-        screen.blit(title_surface, (x + padding, y + padding))
+        title_surface = self.font_title.render(title, True, config.WHITE)
+        title_rect = title_surface.get_rect(center=(raid_x + raid_box_width // 2, raid_y + 30))
+        screen.blit(title_surface, title_rect)
+        
+        # Raid type
+        type_text = raid.type.upper()
+        type_surface = self.font_info.render(type_text, True, config.WHITE)
+        type_rect = type_surface.get_rect(center=(raid_x + raid_box_width // 2, raid_y + 60))
+        screen.blit(type_surface, type_rect)
+        
+        # Continue with details below the box
+        details_y = raid_y + raid_box_height + 20
         
         # Requirements with icons
         if hasattr(raid, 'requirements'):
-            req_y = y + padding + 40
             req_title = self.font_info.render("Requirements:", True, config.BLACK)
-            screen.blit(req_title, (x + padding, req_y))
+            screen.blit(req_title, (x + padding, details_y))
+            req_y = details_y + 30
             
             req = raid.requirements
             req_y += 30
@@ -295,7 +339,7 @@ class DetailView:
         # Dice with icon
         if hasattr(raid, 'dice_added'):
             dice_icon = load_icon(RESOURCE_ICONS['dice'], 20)
-            dice_y = y + padding + 150
+            dice_y = req_y + 10
             if dice_icon:
                 screen.blit(dice_icon, (x + padding, dice_y))
                 dice_text = self.font_info.render(f"x {raid.dice_added}", True, config.RED)
@@ -307,9 +351,9 @@ class DetailView:
         # Plunder at each sublocation
         if hasattr(raid, 'sublocations') and raid.sublocations:
             plunder_title = self.font_info.render("Plunder:", True, config.BLACK)
-            screen.blit(plunder_title, (x + padding, y + padding + 180))
+            screen.blit(plunder_title, (x + padding, dice_y + 30))
             
-            plunder_y = y + padding + 210
+            plunder_y = dice_y + 60
             for i, subloc in enumerate(raid.sublocations):
                 # Worker icon
                 worker_icon_name = WORKER_ICONS.get(subloc.worker_on_spot, 'worker_black')
@@ -325,9 +369,9 @@ class DetailView:
         # VP tiers with icon
         if hasattr(raid, 'vp_tiers'):
             vp_title = self.font_info.render("VP by Strength:", True, config.BLACK)
-            screen.blit(vp_title, (x + padding, y + padding + 250))
+            screen.blit(vp_title, (x + padding, plunder_y + 20))
             
-            vp_y = y + padding + 280
+            vp_y = plunder_y + 50
             icon_size = 16
             for tier in raid.vp_tiers:
                 # Strength icon
@@ -355,27 +399,38 @@ class DetailView:
         offering = self.object_data
         padding = config.DETAIL_VIEW_PADDING
         
-        # Title
-        title_surface = self.font_title.render("Offering Tile", True, config.BLACK)
-        screen.blit(title_surface, (x + padding, y + padding))
+        # Draw a larger offering tile (no image available)
+        tile_size = config.scale(150)
+        tile_x = x + width // 2 - tile_size // 2
+        tile_y = y + padding
         
-        # VP with icon
-        icon_y = y + padding + 40
-        vp_icon = load_icon(RESOURCE_ICONS['vp'], 24)
+        pygame.draw.rect(screen, config.GOLD, (tile_x, tile_y, tile_size, tile_size))
+        pygame.draw.rect(screen, config.BLACK, (tile_x, tile_y, tile_size, tile_size), 3)
+        
+        # VP in the box
+        vp_icon = load_icon(RESOURCE_ICONS['vp'], config.scale(40))
         if vp_icon:
-            screen.blit(vp_icon, (x + padding, icon_y))
-            vp_text = self.font_info.render(f"{offering.vp} Victory Points", True, config.GREEN)
-            screen.blit(vp_text, (x + padding + 30, icon_y + 3))
-        else:
-            vp_text = self.font_info.render(f"Victory Points: {offering.vp}", True, config.GREEN)
-            screen.blit(vp_text, (x + padding, icon_y))
+            icon_x = tile_x + tile_size // 2 - config.scale(20)
+            screen.blit(vp_icon, (icon_x, tile_y + 20))
+        
+        vp_text = f"{offering.vp}"
+        vp_surface = self.font_title.render(vp_text, True, config.BLACK)
+        vp_rect = vp_surface.get_rect(center=(tile_x + tile_size // 2, tile_y + 80))
+        screen.blit(vp_surface, vp_rect)
+        
+        type_surface = self.font_small.render("Victory Points", True, config.BLACK)
+        type_rect = type_surface.get_rect(center=(tile_x + tile_size // 2, tile_y + 110))
+        screen.blit(type_surface, type_rect)
+        
+        # Continue with details below the box
+        details_y = tile_y + tile_size + 20
         
         # Requirements with icons
         if hasattr(offering, 'requirements'):
             req_title = self.font_info.render("Cost:", True, config.BLACK)
-            screen.blit(req_title, (x + padding, y + padding + 80))
+            screen.blit(req_title, (x + padding, details_y))
             
-            req_y = y + padding + 110
+            req_y = details_y + 30
             icon_size = 20
             for resource, amount in offering.requirements.items():
                 icon_name = RESOURCE_ICONS.get(resource, resource)

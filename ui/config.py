@@ -40,7 +40,7 @@ PURPLE = (128, 0, 128)
 ORANGE = (255, 140, 0)
 
 # Layout - Main Game Screen with margins
-MARGIN = scale(10)  # Distance to edge and between views
+MARGIN = WINDOW_HEIGHT // 100  # Distance to edge and between views
 HALF_WIDTH = WINDOW_WIDTH // 2
 
 # Left half: Board view
@@ -70,22 +70,22 @@ HISTORY_PANEL_WIDTH = RIGHT_SIDE_WIDTH // 2 - MARGIN
 HISTORY_PANEL_HEIGHT = LOWER_THIRD_HEIGHT
 
 # Detail view (hover tooltip)
-DETAIL_VIEW_WIDTH = scale(300)
-DETAIL_VIEW_HEIGHT = scale(400)
-DETAIL_VIEW_PADDING = scale(10)
+DETAIL_VIEW_WIDTH = WINDOW_WIDTH // 8
+DETAIL_VIEW_HEIGHT = WINDOW_HEIGHT // 3
+DETAIL_VIEW_PADDING = WINDOW_HEIGHT // 100
 DETAIL_VIEW_BG = (240, 240, 240)
 DETAIL_VIEW_BORDER = BLACK
 
 # Board layout - 6-row grid system
 # Each row height = board height / 6
 ROW_HEIGHT = BOARD_VIEW_HEIGHT // 6
-BOX_SPACING = scale(5)  # Space between boxes
-SLOT_WIDTH = (BOARD_VIEW_WIDTH - 7 * BOX_SPACING) // 6  # Width for a single slot
-SLOT_HEIGHT = scale(80)  # Height for raid/building slots
+BOX_SPACING = BOARD_VIEW_HEIGHT // 150  # Space between boxes
+SLOT_WIDTH = 10  # Width for a single slot
+SLOT_HEIGHT = BOARD_VIEW_HEIGHT // 7  # Height for raid/building slots
 
 # Row 1: Fortresses (3 groups of 2 slots each: XX_XX_XX)
 FORTRESS_Y = BOARD_VIEW_Y + BOX_SPACING
-FORTRESS_SLOT_WIDTH = (BOARD_VIEW_WIDTH - 5 * BOX_SPACING) // 6  # 6 slots total
+FORTRESS_SLOT_WIDTH = (BOARD_VIEW_WIDTH - 5 * MARGIN - 2 * BOX_SPACING) // 6  # 6 slots total
 
 # Row 2: Monastery 2, Monastery 1, Outpost 2 (XX_XX_XX)
 ROW2_Y = FORTRESS_Y + SLOT_HEIGHT + BOX_SPACING
@@ -106,10 +106,10 @@ ROW6_Y = ROW5_Y + SLOT_HEIGHT + BOX_SPACING
 
 # Offering area (right 1/3 of rows 5 and 6)
 OFFERING_AREA_X = BOARD_VIEW_X + BUILDING_AREA_WIDTH + BOX_SPACING
-OFFERING_TILE_SIZE = scale(80)
+OFFERING_TILE_SIZE = SLOT_HEIGHT
 
 # Building slot size
-BUILDING_SLOT_HEIGHT = scale(80)
+BUILDING_SLOT_HEIGHT = SLOT_HEIGHT
 
 # Raid slot size
 RAID_SLOT_WIDTH = scale(120)
