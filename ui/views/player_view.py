@@ -99,11 +99,11 @@ class PlayerView:
         # Show cards if this is the viewing player
         if show_cards and player.hand and height > 130:
             cards_y = y + height - 90
-            draw_card_list(screen, x + 5, cards_y, player.hand, hidden=False, max_cards=6)
+            draw_card_list(screen, x + 5, cards_y, player.hand, hidden=False)
         elif not show_cards and player.hand:
             # Show card backs for other players
             cards_y = y + height - 90
-            draw_card_list(screen, x + 5, cards_y, player.hand, hidden=True, max_cards=6)
+            draw_card_list(screen, x + 5, cards_y, player.hand, hidden=True)
     
     def get_hover_info(self, mouse_pos, players: list, viewing_player_idx: int):
         """
@@ -126,8 +126,8 @@ class PlayerView:
                 cards_y = panel_y + panel_height_actual - 90
                 cards_x = panel_x + 5
                 
-                # Check each card
-                for j, card in enumerate(player.hand[:6]):
+                # Check each card (all of them, not just first 6)
+                for j, card in enumerate(player.hand):
                     card_x = cards_x + j * (config.CARD_WIDTH + config.CARD_SPACING)
                     
                     if (card_x <= mx <= card_x + config.CARD_WIDTH and

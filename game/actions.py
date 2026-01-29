@@ -460,7 +460,7 @@ class RaidAction(Action):
         
         # Check if sublocation exists and has plunder
         raid_state = state.get_raid_state(self.location_id, self.sublocation_id)
-        if not raid_state or raid_state.plunder_remaining <= 0:
+        if not raid_state or raid_state.get_plunder_remaining() <= 0:
             return False
         
         return True
@@ -492,13 +492,19 @@ class RaidAction(Action):
         vp_earned = raid.get_vp_for_strength(final_strength)
         player.vp += vp_earned
         
-        # Get plunder
-        plunder_gained = raid_state.plunder_remaining
-        # Plunder is distributed as resources (simplified for now)
-        # TODO: Implement plunder selection logic
+        # Get plunder - collect all resources from this raid spot
+        for resource, amount in raid_state.plunder_resources.items():
+            if resource == 'gold':
+                player.gold += amount
+            elif resource == 'iron':
+                player.iron += amount
+            elif resource == 'livestock':
+                player.livestock += amount
+            elif resource == 'valkyrie':
+                player.valkyrie += amount
         
         # Take plunder from raid location
-        raid_state.plunder_remaining = 0
+        raid_state.plunder_resources.clear()
         
         # Place worker at raid location
         raid_state.worker_present = player.worker_in_hand

@@ -126,8 +126,12 @@ class RaidState:
     """State of a raid sublocation"""
     location_id: str
     sublocation_id: str
-    plunder_remaining: int
+    plunder_resources: Dict[str, int]  # Actual resources on this spot (e.g., {"silver": 2, "gold": 1})
     worker_present: Optional[WorkerColor]
+    
+    def get_plunder_remaining(self) -> int:
+        """Get total number of plunder resources remaining"""
+        return sum(self.plunder_resources.values())
 
 
 @dataclass
@@ -235,14 +239,30 @@ class GameState:
         random.shuffle(offerings)
         visible_offerings = [offerings.pop() for _ in range(3) if offerings]
         
-        # Initialize raid states
+        # Initialize raid states with random resource distribution from pool
         raid_states = []
+        
+        # Create a pool of available resources for plunder (only gold, iron, livestock, valkyrie)
+        resource_pool = []
+        resource_pool.extend(['valkyrie'] * 18)
+        resource_pool.extend(['gold'] * 18)
+        resource_pool.extend(['iron'] * 18)
+        resource_pool.extend(['livestock'] * 26)
+        random.shuffle(resource_pool)
+        
         for raid in board_db.raids:
             for subloc in raid.sublocations:
+                # Draw random resources from pool based on plunder value
+                plunder_resources = {}
+                for _ in range(subloc.plunder):
+                    if resource_pool:
+                        resource = resource_pool.pop()
+                        plunder_resources[resource] = plunder_resources.get(resource, 0) + 1
+                
                 raid_state = RaidState(
                     location_id=raid.id,
                     sublocation_id=subloc.id,
-                    plunder_remaining=subloc.plunder,
+                    plunder_resources=plunder_resources,
                     worker_present=WorkerColor(subloc.worker_on_spot) if subloc.worker_on_spot else None
                 )
                 raid_states.append(raid_state)
@@ -352,7 +372,7 @@ class GameState:
         """Check if game should end"""
         # Condition 1: Only 1 plunder left in all Fortresses combined
         fortress_plunder = sum(
-            rs.plunder_remaining 
+            rs.get_plunder_remaining()
             for rs in self.raid_states 
             if rs.location_id.startswith('raid_008') or  # Fortress 1
                rs.location_id.startswith('raid_009') or  # Fortress 2
@@ -432,4 +452,4 @@ if __name__ == "__main__":
     print(f"\nRaid States: {len(game.raid_states)} sublocations")
     print("Example raids:")
     for rs in game.raid_states[:5]:
-        print(f"  {rs.location_id}/{rs.sublocation_id}: {rs.plunder_remaining} plunder, worker: {rs.worker_present}")
+        print(f"  {rs.location_id}/{rs.sublocation_id}: {rs.get_plunder_remaining()} plunder, worker: {rs.worker_present}")

@@ -255,7 +255,7 @@ class RaidersEnv(gym.Env):
         # Raid states
         raid_plunder = []
         for raid_state in state.raid_states:
-            raid_plunder.append(raid_state.plunder_remaining / 10.0)
+            raid_plunder.append(raid_state.get_plunder_remaining() / 10.0)
         # Pad to 23 sublocations
         while len(raid_plunder) < 23:
             raid_plunder.append(0.0)

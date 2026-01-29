@@ -5,8 +5,7 @@ import pygame
 from game.engine import GameEngine
 from game.actions import Action
 from ui import config
-from ui.views import BoardView, PlayerView, ActionPanel, HistoryView
-from ui.components import DetailView
+from ui.views import BoardView, PlayerView, ActionPanel, HistoryView, DetailView
 
 
 class GameScreen:
